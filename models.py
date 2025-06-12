@@ -78,7 +78,7 @@ class ques_seq_gen(nn.Module): #
             all_batches.append(this_batch)
         return all_batches
 
-class disc_aktcl_1(nn.Module): 
+class discriminator(nn.Module): 
     def __init__(self, args):
         super().__init__()
         self.attention_heads = args.attention_heads
@@ -452,7 +452,6 @@ class disc_aktcl_1(nn.Module):
                 else:
                     mask_concept_id_list.append(related_concept_index[j])
             mask_concept_id = torch.stack(mask_concept_id_list, dim = 0)
-            # mask_concept_id = torch.where(mask_rand < torch.tensor(self.mask_prob).to(self.device).unsqueeze(0).repeat(data_len), masked_concepts, related_concept_index)
             masked_data[1].append([mask_ques_id, mask_concept_id, interval_time, concept_interval_time, elapsed_time, operate_org])
 
             replace_rand = torch.tensor(np.random.random(data_len)).to(self.device)
@@ -534,7 +533,7 @@ class disc_aktcl_1(nn.Module):
 
         return masked_data, crop_data, permute_data, replace_data
 
-class gen38_m3_21(nn.Module): 
+class generator(nn.Module): 
     def __init__(self, args):
         super().__init__()
         

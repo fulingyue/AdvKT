@@ -1,4 +1,3 @@
-import torch
 import logging as log
 
 def batch_data_to_device(data, device):

@@ -19,7 +19,6 @@ cos_simi = torch.nn.CosineSimilarity(dim = 2, eps=1e-6)
 sigmoid = torch.nn.Sigmoid()
 
 def gradient_penalty(discriminator, real_vec_org, fake_vec_org, device):
-    # alpha = tensor(np.random.random((real_samples.size(0), 1, 1, 1)))
     sample_num = min(real_vec_org.size()[0], fake_vec_org.size()[0])
     real_vec = real_vec_org[0: sample_num]
     fake_vec = fake_vec_org[0: sample_num]
@@ -49,9 +48,6 @@ def gradient_penalty(discriminator, real_vec_org, fake_vec_org, device):
 
 def train(model, loaders, args):
     log.info("training...")
-    one = torch.tensor(1.0).to(args.device)
-    zero = torch.tensor(0.0).to(args.device)
-    test_batch = None
 
     Disc = getattr(models, args.discriminator)
     discriminator = Disc(args).to(args.device)
@@ -62,19 +58,15 @@ def train(model, loaders, args):
     D_Gen = getattr(models, args.data_gen)
     data_gen = D_Gen(args).to(args.device)
 
-    BCELosswithlog = torch.nn.BCEWithLogitsLoss()
     BCEloss = torch.nn.BCELoss()
-    kl_loss = torch.nn.KLDivLoss()
-    l1_loss = torch.nn.SmoothL1Loss()
-    mse_loss = torch.nn.MSELoss()
-    
+
 
     optimizer_gen = torch.optim.Adam(generator.parameters(), lr=args.gen_lr)
     optimizer_dis = torch.optim.Adam(discriminator.parameters(), lr=args.disc_lr)
     train_sigmoid = torch.nn.Sigmoid()
     train_len = len(loaders['train'].dataset)
     '''freeze discri'''
-    train_disc = 1
+
     for epoch in range(args.n_epochs):
         loss_all = 0
         dis_loss = 0.0
